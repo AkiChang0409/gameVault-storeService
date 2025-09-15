@@ -1,0 +1,16 @@
+services:
+  pg:
+    image: postgres:16
+    container_name: gamestore-db
+    environment:
+      POSTGRES_DB: gamestore
+      POSTGRES_USER: gv
+      POSTGRES_PASSWORD: gvpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+volumes:
+  pgdata:
+

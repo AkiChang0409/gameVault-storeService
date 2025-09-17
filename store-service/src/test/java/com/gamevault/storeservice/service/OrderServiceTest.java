@@ -4,7 +4,10 @@ import com.gamevault.storeservice.model.*;
 import com.gamevault.storeservice.model.dto.OrderDTO;
 import com.gamevault.storeservice.model.ENUM.OrderStatus;
 import com.gamevault.storeservice.model.ENUM.PaymentMethod;
+import com.gamevault.storeservice.repository.GameRepository;
 import com.gamevault.storeservice.repository.OrderRepository;
+import com.gamevault.storeservice.repository.PurchasedGameActivationCodeRepository;
+import com.gamevault.storeservice.repository.UnusedGameActivationCodeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,13 +20,17 @@ import static org.mockito.Mockito.*;
 
 class OrderServiceTest {
 
+    private GameRepository gameRepository;
     private OrderRepository orderRepository;
     private OrderService orderService;
+    private UnusedGameActivationCodeRepository unusedGameActivationCodeRepository;
+    private PurchasedGameActivationCodeRepository purchasedGameActivationCodeRepository;
+    private GameActivationCodeService gameActivationCodeService;
 
     @BeforeEach
     void setUp() {
         orderRepository = Mockito.mock(OrderRepository.class);
-        orderService = new OrderService(orderRepository);
+        orderService = new OrderService(orderRepository, unusedGameActivationCodeRepository, purchasedGameActivationCodeRepository, gameActivationCodeService, gameRepository);
     }
 
     @Test
@@ -41,7 +48,7 @@ class OrderServiceTest {
             return order;
         });
 
-        OrderDTO dto = orderService.createOrder(cart, PaymentMethod.CREDIT_CARD);
+        OrderDTO dto = orderService.createPendingOrder(cart, PaymentMethod.CREDIT_CARD);
 
         assertNotNull(dto.getOrderId());
         assertEquals(1L, dto.getUserId());

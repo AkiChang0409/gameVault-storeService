@@ -247,4 +247,20 @@ public class CartService {
                 .orElseThrow(() -> new IllegalStateException("Cart not found for user " + userId));
     }
 
+    @Transactional
+    public void markCheckedOut(Long userId, PaymentMethod method) {
+        Cart cart = getOrCreate(userId); // 获取或创建用户的购物车
+        if (cart.isEmpty()) {
+            throw new IllegalStateException("Cart is empty, cannot checkout");
+        }
+        cart.setStatus(CartStatus.CHECKED_OUT);
+        cart.setPaymentMethod(method);
+        cart.setLastModifiedDate(LocalDateTime.now());
+
+        // 可选：清空购物车条目
+        cart.getCartItems().clear();
+
+        cartRepository.save(cart);
+    }
+
 }

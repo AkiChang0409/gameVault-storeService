@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/db/init/mock_games.sql" value="8d41a194-59a4-4d33-9933-c475ab2dbd8a" />
+  </component>
+</project>
